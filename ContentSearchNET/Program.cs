@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
+
 
 namespace ContentSearchNET
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
-            int exit = 0;
+            bool exit = false;
             List<FileInfo> accessList = new List<FileInfo>();
-            while (exit == 0)
+            while (exit == false)
             {
                 accessList.Clear();
-                Console.WriteLine("Specify directory path?");
+
+                String queryDir = selectFolder();
+
+                /*Console.WriteLine("Specify directory path?");
                 String queryDir = Console.ReadLine();
-                if (queryDir.Equals("close")) { exit = 0; break; }
+                if (queryDir.Equals("close")) { exit = true; break; }*/
                 Console.WriteLine("Term to search for?");
                 String queryTerm = Console.ReadLine();
 
@@ -47,6 +54,16 @@ namespace ContentSearchNET
                 else { goto Retry; }
             }
 
+        }
+        static string selectFolder() 
+        {
+            System.Windows.Forms.FolderBrowserDialog broswer = new FolderBrowserDialog();
+            DialogResult result = broswer.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                return broswer.SelectedPath.ToString();
+            }
+            else {throw new FileNotFoundException("Something went wrong"); }
         }
     }
 }
